@@ -6,7 +6,7 @@ Luma is a smart indoor environment companion built to help people understand com
 
 Luma is designed around a simple idea: indoor comfort should feel understandable instead of technical. Rather than exposing raw device telemetry without context, the product turns room data into a readable overview, a focused room detail experience, and a small set of signals that explain when something needs attention.
 
-The current version stays intentionally narrow. It supports one primary space, one paired device per room, a four-step onboarding flow, a live-ish dashboard, a fixed room-detail visualization set, and practical settings. That scope keeps the experience coherent while still allowing the product to demonstrate real state, real data flow, and real decision-making.
+The current version stays intentionally narrow. It supports one primary space, one paired device per room, a four-step onboarding flow, a continuously refreshing dashboard, a fixed room-detail visualization set, and practical settings. That scope keeps the experience coherent while still allowing the product to demonstrate real state, real data flow, and real decision-making.
 
 ## Visual Overview
 
@@ -14,15 +14,17 @@ The current version stays intentionally narrow. It supports one primary space, o
 
 ![Luma landing page](public/readme/landing-overview.png)
 
-The landing page introduces the product clearly and gives two direct entry points: enter the demo immediately or walk through the guided setup flow.
+The landing page introduces the product clearly and gives two direct entry points: open the dashboard immediately or walk through the guided setup flow.
 
 ### Guided Setup
 
 ![Luma onboarding flow](public/readme/onboarding-flow.gif)
 
-The onboarding flow stays intentionally short. It names the space, selects room types, pairs mock devices, and then hands off to the dashboard without adding unnecessary configuration.
+The onboarding flow stays intentionally short. It names the space, selects room types, pairs room monitors, and then hands off to the dashboard without adding unnecessary configuration.
 
 ### Live Dashboard
+
+![Luma dashboard overview](public/readme/dashboard-overview.png)
 
 ![Luma dashboard live refresh](public/readme/dashboard-live.gif)
 
@@ -40,8 +42,8 @@ The room detail page focuses on one environment with fixed chart scope, recent s
 
 The product flow starts on a focused landing page and quickly moves into a usable environment view.
 
-- The user can enter the demo immediately from the landing page.
-- A short onboarding flow creates a space, selects room types, pairs mock devices, and seeds believable room history.
+- The user can open the dashboard immediately from the landing page.
+- A short onboarding flow creates a space, selects room types, pairs room monitors, and seeds realistic room history.
 - The dashboard provides a live multi-room snapshot of current conditions, device state, alerts, and recent insights.
 - A room detail page drills into one room with fixed visualizations, event markers, alerts, and presentation-ready insight summaries.
 - The settings page allows threshold tuning and preference changes without turning into a full admin console.
@@ -52,7 +54,7 @@ What makes the product useful is that each screen is connected to the same under
 
 ### Dashboard
 
-The dashboard acts as the main operational view. It shows room cards, aggregated comfort context, device state, and a concise insight rail. It is designed to answer the question, “Which rooms feel good right now, and which ones need attention?”
+The dashboard acts as the main operational view. It shows room cards, aggregated comfort context, device state, and a concise insight rail. It is designed to answer the question, "Which rooms feel good right now, and which ones need attention?"
 
 ### Room Detail
 
@@ -67,7 +69,7 @@ That fixed scope keeps the page readable and prevents the product from turning i
 
 ### Onboarding
 
-Onboarding defines the space, selects room types, pairs devices, and gets the user into the product quickly. It exists to create just enough setup context to make the rest of the app feel personalized, without making setup itself the product.
+Onboarding defines the space, selects room types, pairs monitors, and gets the user into the product quickly. It exists to create just enough setup context to make the rest of the app feel personalized, without making setup itself the product.
 
 ### Settings
 
@@ -123,7 +125,7 @@ The data model is small, but each entity has a clear product purpose.
 
 ## Simulation Strategy
 
-The simulation model is designed to make the product feel believable without depending on background workers, hardware integrations, or complex infrastructure.
+The simulation model is designed to make the product feel grounded without depending on background workers, hardware integrations, or complex infrastructure.
 
 The runtime works in two stages:
 
@@ -135,7 +137,7 @@ Each room starts with a realistic seven-day history. That gives the dashboard, c
 
 When the dashboard or room detail page polls for updates, the app generates a fresh reading if enough simulated time has passed. That update introduces gradual drift, room-type-specific behavior, occasional anomalies, and device-state changes such as battery and sync freshness.
 
-This keeps the product responsive and demo-friendly while still grounding the experience in state that changes over time.
+This keeps the product responsive while still grounding the experience in state that changes over time.
 
 ## Alerts and Comfort Scoring
 
@@ -184,7 +186,7 @@ http://localhost:3000
 4. Explore the main product flows
 
 - start from the landing page
-- enter the demo or run onboarding
+- open the dashboard or run onboarding
 - open the dashboard and room detail pages
 - update thresholds and preferences in settings
 
@@ -236,8 +238,8 @@ A few decisions shape that tone:
 Several simplifications are intentional.
 
 - the current runtime uses an in-memory store so the app is easy to run locally
-- polling is used instead of WebSockets to keep updates believable without adding real-time infrastructure
-- the product supports one primary space and one device per room in the MVP
+- polling is used instead of WebSockets to keep updates readable without adding real-time infrastructure
+- the product supports one primary space and one device per room in the current version
 - the current insight layer is deterministic instead of depending on AI services
 - production authentication, collaboration, notifications, and exports are intentionally excluded
 
@@ -252,4 +254,4 @@ The next natural extensions of the current architecture are:
 - expand historical summaries and comfort comparisons
 - improve device realism without turning the product into a firmware simulator
 - add richer visual assets and release-ready polish
-- introduce a lightweight authentication path once single-user demo mode is no longer enough
+- introduce a lightweight authentication path once single-user mode is no longer enough

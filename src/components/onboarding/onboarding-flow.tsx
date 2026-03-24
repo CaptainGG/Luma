@@ -13,9 +13,11 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function OnboardingFlow() {
+export function OnboardingFlow({ initialStep = 1 }: { initialStep?: number }) {
   const router = useRouter();
-  const [step, setStep] = useState(1);
+  const normalizedStep = Math.min(4, Math.max(1, initialStep));
+  const isPreviewStep = normalizedStep !== 1;
+  const [step, setStep] = useState(normalizedStep);
   const [spaceName, setSpaceName] = useState("Nordic Studio Loft");
   const [roomTypes, setRoomTypes] = useState<RoomType[]>(["BEDROOM", "WORKSPACE", "LIVING_ROOM"]);
   const [roomIds, setRoomIds] = useState<string[]>([]);
@@ -80,7 +82,7 @@ export function OnboardingFlow() {
           <>
             <div>
               <CardTitle>Name your space</CardTitle>
-              <CardDescription>Keep onboarding minimal: define the space and move on.</CardDescription>
+              <CardDescription>Start with the space name, then move straight into room setup.</CardDescription>
             </div>
             <div className="space-y-2">
               <Label htmlFor="space-name">Space name</Label>
@@ -93,7 +95,7 @@ export function OnboardingFlow() {
           <>
             <div>
               <CardTitle>Select room types</CardTitle>
-              <CardDescription>Choose the rooms to seed for the demo. No advanced configuration here.</CardDescription>
+              <CardDescription>Choose the rooms to prepare so the dashboard reflects the spaces you care about.</CardDescription>
             </div>
             <div className="grid gap-3 md:grid-cols-2">
               {ROOM_TYPE_OPTIONS.map((option) => {
@@ -123,8 +125,8 @@ export function OnboardingFlow() {
         {step === 3 ? (
           <>
             <div>
-              <CardTitle>Pair mock devices</CardTitle>
-              <CardDescription>One device per room for the MVP. Quick, believable, and demo friendly.</CardDescription>
+              <CardTitle>Pair room monitors</CardTitle>
+              <CardDescription>Pair one monitor per room to start tracking air quality, comfort, and room activity.</CardDescription>
             </div>
             <div className="flex flex-wrap gap-2">
               {roomTypes.map((roomType) => (
@@ -138,17 +140,21 @@ export function OnboardingFlow() {
           <>
             <div>
               <CardTitle>Ready to monitor</CardTitle>
-              <CardDescription>The space is created, rooms are seeded, and mock devices are paired. Head straight to the dashboard.</CardDescription>
+              <CardDescription>The space is ready, rooms are prepared, and monitors are paired. Head straight to the dashboard.</CardDescription>
             </div>
             <div className="rounded-[24px] bg-[color:var(--accent-soft)] p-5 text-sm leading-6 text-[color:var(--accent-strong)]">
-              Your demo flow stays intentionally short: create space, choose rooms, pair devices, land on dashboard.
+              Setup stays short: create the space, choose rooms, pair monitors, and start tracking conditions.
             </div>
           </>
         ) : null}
 
-        <Button onClick={() => void handleContinue()} disabled={isLoading || (step === 2 && !roomTypes.length)}>
-          {isLoading ? "Working..." : step < 4 ? "Continue" : "Open dashboard"}
-        </Button>
+        {isPreviewStep ? (
+          <div className="h-11" aria-hidden="true" />
+        ) : (
+          <Button onClick={() => void handleContinue()} disabled={isLoading || (step === 2 && !roomTypes.length)}>
+            {isLoading ? "Working..." : step < 4 ? "Continue" : "Open dashboard"}
+          </Button>
+        )}
       </Card>
     </div>
   );

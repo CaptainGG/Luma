@@ -16,7 +16,7 @@ const mono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "Luma",
-  description: "A portfolio-quality smart indoor environment companion.",
+  description: "A smart indoor environment companion for comfort, air quality, light, and noise.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

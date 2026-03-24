@@ -15,7 +15,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <div className="mt-3 flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-semibold tracking-[-0.04em] text-[color:var(--foreground)]">{APP_NAME}</h1>
-                <p className="mt-1 text-sm text-[color:var(--muted-foreground)]">Portfolio-ready climate intelligence</p>
+                <p className="mt-1 text-sm text-[color:var(--muted-foreground)]">Indoor comfort monitoring</p>
               </div>
             </div>
           </div>
@@ -31,12 +31,12 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Link>
           </nav>
           <div className="mt-10 rounded-[28px] bg-[color:var(--accent-soft)] p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">Demo mode</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">Live data</p>
             <p className="mt-3 text-sm leading-6 text-[color:var(--muted-foreground)]">
-              Data stays lightweight: seeded history plus runtime drift when dashboards poll.
+              Seeded history and gentle runtime drift keep each room current as the product refreshes.
             </p>
             <Button className="mt-4 w-full" variant="secondary" asChild>
-              <Link href="/dashboard">Open live demo</Link>
+              <Link href="/dashboard">Open dashboard</Link>
             </Button>
           </div>
         </aside>

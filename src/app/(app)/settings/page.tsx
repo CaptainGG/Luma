@@ -12,7 +12,7 @@ export default async function SettingsPage() {
       <PageHeader
         eyebrow="Room controls"
         title="Thresholds and summaries"
-        description="A tight MVP scope: practical thresholds, summary cadence, and a few calm preference toggles."
+        description="Practical thresholds, summary cadence, and a few calm preference toggles for each room."
       />
       <SettingsClient initialData={data} />
     </div>

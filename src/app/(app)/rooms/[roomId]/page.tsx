@@ -14,7 +14,7 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
       <PageHeader
         eyebrow="Room detail"
         title={detail.name}
-        description="Fixed MVP visualizations only: temperature + humidity, CO2, light + noise, and comfort score over time."
+        description="Track temperature, humidity, air quality, light, noise, and comfort across the selected range."
       />
       <RoomDetailClient roomId={roomId} initialDetail={detail} initialSeries={series} />
     </div>

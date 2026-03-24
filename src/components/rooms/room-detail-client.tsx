@@ -87,7 +87,7 @@ export function RoomDetailClient({
               <Badge>{detail.type.toLowerCase().replaceAll("_", " ")}</Badge>
               <CardTitle className="mt-3 text-3xl">{detail.name}</CardTitle>
               <CardDescription className="mt-2 max-w-xl">
-                Live conditions, fixed MVP charts, and calm room signals generated from the latest readings.
+                Live conditions, room history, and recent signals generated from the latest readings.
               </CardDescription>
             </div>
             <div className="flex rounded-full bg-black/4 p-1">
@@ -150,7 +150,7 @@ export function RoomDetailClient({
               </div>
             </>
           ) : (
-            <EmptyState title="No paired hardware yet" description="Use onboarding to pair a mock device before monitoring this room." />
+            <EmptyState title="No paired hardware yet" description="Use onboarding to pair a room monitor before tracking this room." />
           )}
         </Card>
       </section>

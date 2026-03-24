@@ -8,7 +8,7 @@ export default function NotFound() {
     <main className="flex min-h-screen items-center justify-center px-4">
       <Card className="max-w-md space-y-4 text-center">
         <CardTitle>That room drifted out of view</CardTitle>
-        <CardDescription>Try returning to the dashboard and choosing an active room from the seeded demo.</CardDescription>
+        <CardDescription>Try returning to the dashboard and choosing an active room from the current space.</CardDescription>
         <Button asChild>
           <Link href="/dashboard">Back to dashboard</Link>
         </Button>

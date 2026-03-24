@@ -12,7 +12,7 @@ export default function Home() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--muted-foreground)]">Luma</p>
             <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.06em] text-[color:var(--foreground)] md:text-6xl">
-              Indoor comfort intelligence, shaped for a calm and believable product demo.
+              Indoor comfort intelligence for rooms that should feel calm, healthy, and easy to understand.
             </h1>
           </div>
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[color:var(--accent-soft)] text-[color:var(--accent-strong)]">
@@ -23,12 +23,12 @@ export default function Home() {
         <div className="mt-10 grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_420px]">
           <section className="space-y-6">
             <p className="max-w-2xl text-lg leading-8 text-[color:var(--muted-foreground)]">
-              Luma blends simulated room sensors, cloud-backed software, and grounded insight generation into a portfolio-ready indoor environment companion.
+              Luma blends simulated room sensors, grounded room insights, and a calm multi-room dashboard into one indoor environment companion.
             </p>
             <div className="flex flex-wrap gap-3">
               <Button asChild size="lg">
                 <Link href="/dashboard">
-                  Enter demo
+                  Open dashboard
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -38,9 +38,9 @@ export default function Home() {
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               {[
-                ["Seeded realism", "24h and 7d history with believable drift and anomalies."],
-                ["Fixed chart scope", "Exactly four room-detail charts for a contained MVP."],
-                ["Thin insight layer", "Deterministic findings with optional LLM phrasing later."],
+                ["Seeded history", "24h and 7d of room history with gradual drift and occasional anomalies."],
+                ["Focused room charts", "Four room-detail charts keep temperature, air quality, light, noise, and comfort readable."],
+                ["Grounded insights", "Deterministic findings turn room patterns into concise, product-style guidance."],
               ].map(([title, description]) => (
                 <Card key={title} className="space-y-3">
                   <CardTitle className="text-base">{title}</CardTitle>
@@ -52,15 +52,15 @@ export default function Home() {
 
           <Card className="space-y-5 bg-[#f7f6f1]">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-[color:var(--foreground)]">Demo story</p>
+              <p className="text-sm font-medium text-[color:var(--foreground)]">How it works</p>
               <Sparkles className="h-4 w-4 text-[color:var(--accent-strong)]" />
             </div>
             <div className="space-y-4">
               {[
-                "Create a space and pair a mock room monitor.",
-                "Watch dashboard cards refresh with believable drift.",
-                "Open a room to inspect fixed MVP charts and event markers.",
-                "Adjust thresholds and see alerts stay grounded in real readings.",
+                "Create a space and pair a room monitor in a few calm setup steps.",
+                "Watch room cards refresh as new readings drift in over time.",
+                "Open a room to inspect charts, recent alerts, and event markers.",
+                "Adjust thresholds and keep alerts grounded in real conditions.",
               ].map((item) => (
                 <div key={item} className="flex items-start gap-3 rounded-2xl bg-white px-4 py-3">
                   <Dot className="mt-1 h-4 w-4 text-[color:var(--accent-strong)]" />

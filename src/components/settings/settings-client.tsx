@@ -144,7 +144,7 @@ export function SettingsClient({
       <div className="space-y-4">
         <div>
           <h2 className="text-xl font-semibold tracking-[-0.03em] text-[color:var(--foreground)]">Room thresholds</h2>
-          <p className="text-sm text-[color:var(--muted-foreground)]">Small, explicit room controls for the MVP. Nothing more.</p>
+          <p className="text-sm text-[color:var(--muted-foreground)]">Adjust the ranges that shape alerts and comfort scoring for each room.</p>
         </div>
         {rooms.length ? (
           rooms.map((room) => (

@@ -88,7 +88,7 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-semibold tracking-[-0.03em] text-[color:var(--foreground)]">Room snapshot</h2>
-              <p className="text-sm text-[color:var(--muted-foreground)]">Live-ish conditions with device and alert context.</p>
+              <p className="text-sm text-[color:var(--muted-foreground)]">Current room conditions with device status and alert context.</p>
             </div>
             {isLoading ? <Badge variant="neutral">Refreshing</Badge> : null}
           </div>
@@ -134,7 +134,7 @@ export function DashboardClient({ initialData }: { initialData: DashboardData })
               ))}
             </div>
           ) : (
-            <EmptyState title="No rooms yet" description="Complete onboarding to generate a believable multi-room demo." />
+            <EmptyState title="No rooms yet" description="Complete setup to add rooms and start monitoring your space." />
           )}
         </div>
 
