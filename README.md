@@ -1,153 +1,155 @@
 # Luma
 
-Luma is a portfolio-quality smart indoor environment companion designed to feel like a believable product prototype rather than a disconnected UI exercise. It combines simulated room sensors, a calm multi-room dashboard, grounded alerting, derived comfort scoring, and a thin insight system into a polished full-stack demo that shows both product thinking and implementation depth.
+Luma is a smart indoor environment companion built to help people understand comfort, air quality, light, and noise across the rooms they use every day. It combines simulated room sensors, a calm multi-room dashboard, grounded alerts, derived comfort scoring, and a lightweight insight layer into a clean full-stack product experience.
 
-## Why I Built This
+## Product Overview
 
-I built Luma to explore a type of product that sits between consumer wellness software and smart-home infrastructure. The goal was not to recreate an enterprise IoT platform. The goal was to design and implement something focused, coherent, and demoable: a product that feels like it could exist, with enough systems thinking behind it to hold up as a portfolio piece.
+Luma is designed around a simple idea: indoor comfort should feel understandable instead of technical. Rather than exposing raw device telemetry without context, the product turns room data into a readable overview, a focused room detail experience, and a small set of signals that explain when something needs attention.
 
-That meant making a few deliberate choices early. I wanted the project to show that I can shape scope, design a clean backend boundary, simulate realistic data, and build a UI that feels intentional instead of defaulting to generic dashboard patterns. I also wanted the project to be easy to run locally, which is why the current version uses an in-memory runtime data layer instead of requiring a full database just to evaluate the app.
+The current version stays intentionally narrow. It supports one primary space, one paired device per room, a four-step onboarding flow, a live-ish dashboard, a fixed room-detail visualization set, and practical settings. That scope keeps the experience coherent while still allowing the product to demonstrate real state, real data flow, and real decision-making.
+
+## Visual Overview
+
+### Landing Experience
+
+![Luma landing page](public/readme/landing-overview.png)
+
+The landing page introduces the product clearly and gives two direct entry points: enter the demo immediately or walk through the guided setup flow.
+
+### Guided Setup
+
+![Luma onboarding flow](public/readme/onboarding-flow.gif)
+
+The onboarding flow stays intentionally short. It names the space, selects room types, pairs mock devices, and then hands off to the dashboard without adding unnecessary configuration.
+
+### Live Dashboard
+
+![Luma dashboard live refresh](public/readme/dashboard-live.gif)
+
+The dashboard shows room conditions, device health, active alerts, and recent insights. Lightweight polling keeps the interface moving without introducing real-time infrastructure complexity.
+
+### Room and Settings Views
+
+![Luma room detail view](public/readme/room-detail.png)
+
+![Luma settings view](public/readme/settings.png)
+
+The room detail page focuses on one environment with fixed chart scope, recent signals, and alert context. The settings page keeps controls practical by focusing on thresholds and summary preferences.
 
 ## What the Product Does
 
-The experience starts on a simple landing page that explains the product and invites the user into the demo. From there, the app supports a small but complete product loop that someone can actually follow.
+The product flow starts on a focused landing page and quickly moves into a usable environment view.
 
 - The user can enter the demo immediately from the landing page.
-- A short onboarding flow lets the user name a space, choose room types, pair mock devices, and land on the dashboard.
-- The dashboard gives a live multi-room snapshot of current conditions, device health, active alerts, and recent insights.
-- A room detail page drills into one room with a fixed set of four charts, recent alerts, event markers, and presentation-ready room insights.
-- The settings screen allows threshold and preference updates without introducing unnecessary account or team complexity.
+- A short onboarding flow creates a space, selects room types, pairs mock devices, and seeds believable room history.
+- The dashboard provides a live multi-room snapshot of current conditions, device state, alerts, and recent insights.
+- A room detail page drills into one room with fixed visualizations, event markers, alerts, and presentation-ready insight summaries.
+- The settings page allows threshold tuning and preference changes without turning into a full admin console.
 
-From a portfolio perspective, this matters because the product is not just "pages." Each screen connects to a real data flow: simulated readings, derived comfort scoring, alert evaluation, and insight generation all feed what the user sees.
+What makes the product useful is that each screen is connected to the same underlying system behavior. Readings drive scoring, scoring supports insight generation, thresholds produce alerts, and updates flow back into the UI through a consistent service layer.
 
-## MVP Scope
+## Core Features
 
-The MVP is intentionally tight. It includes enough functionality to demonstrate product quality and full-stack thinking without drifting into infrastructure-heavy territory.
+### Dashboard
 
-Included in this version:
+The dashboard acts as the main operational view. It shows room cards, aggregated comfort context, device state, and a concise insight rail. It is designed to answer the question, “Which rooms feel good right now, and which ones need attention?”
 
-- A polished landing page and demo entry point
-- A minimal four-step onboarding flow
-- A multi-room dashboard with live-ish refresh behavior
-- A room detail page with exactly four charts
-- A settings page for summary preferences and threshold tuning
-- A seeded seven-day history plus runtime reading generation
-- Alerts based on actual thresholds and readings
-- Deterministic findings rendered as product-style insight copy
+### Room Detail
 
-Intentionally excluded from this version:
-
-- Real hardware integration
-- Production authentication
-- Multi-user collaboration
-- Push notifications and messaging systems
-- Multi-space management
-- WebSocket infrastructure
-- Firmware simulation
-- Advanced analytics exports
-
-Those exclusions are part of the product strategy, not missing polish. Keeping the MVP narrow made it possible to spend time on clarity, UX, and believable behavior instead of scattering effort across too many half-finished systems.
-
-## Tech Stack
-
-Luma is built with a stack chosen for clarity and speed of iteration rather than novelty.
-
-- `Next.js App Router` powers both the frontend and the route-handler API layer, which keeps the product full-stack without splitting the codebase across multiple services.
-- `TypeScript` keeps the data contracts between UI, services, and API routes explicit and safer to evolve.
-- `Tailwind CSS` supports the calm editorial UI direction while keeping styling close to component intent.
-- `shadcn-style UI primitives` under `src/components/ui` provide a lightweight component foundation without forcing the app into a generic visual identity.
-- `Recharts` is used for the room-detail visualizations because it is expressive enough for the MVP while staying lightweight.
-- `Zod` validates request payloads and query parameters at the API edge.
-- `Prisma` is still present in the repo as part of the longer-term architecture, but the current local runtime uses an in-memory fake store so the project is frictionless to run.
-- `date-fns`, `lucide-react`, and small utility libraries support formatting, time handling, and visual polish without pulling in heavy abstractions.
-
-## Architecture Overview
-
-The architecture is intentionally layered so the product remains easy to reason about as it grows.
-
-- `src/app/api` handles HTTP transport, request validation, and response formatting only.
-- `src/server/services` contains orchestration and business logic such as simulation refresh, alert reconciliation, settings updates, and insight assembly.
-- `src/server/queries` contains reusable read operations over the underlying data source.
-- `src/server/store` owns the current in-memory fake runtime state and the mutation helpers that support onboarding, settings, alerts, and simulation.
-- `src/lib` contains pure utilities, formatting helpers, shared domain types, constants, scoring helpers, and validation schemas.
-
-This separation matters because it prevents UI code from becoming data-access code. React components never reach into storage directly. Route handlers call services, services call queries and utilities, and the data source stays behind those boundaries.
-
-## Core Product Flows
-
-### Landing and Demo Entry
-
-The landing page is intentionally simple. It frames the product, communicates the mood of the interface, and offers two clear paths: jump into the dashboard or walk through onboarding. The point of this screen is not marketing in the startup sense. It is to make the prototype feel like a coherent product from the first moment.
-
-### Onboarding
-
-The onboarding flow is minimal by design. The user names a space, chooses room types, pairs mock devices, and then lands on the dashboard. That gives enough setup context to make the rest of the app feel personalized, while staying fast enough for a portfolio reviewer to complete in one sitting without friction.
-
-Behind the scenes, onboarding mutates the in-memory store for the current session. Rooms are created or replaced, devices are paired, and the data model is reset into a believable state for the selected room mix.
-
-### Dashboard Refresh Behavior
-
-The dashboard is the operational center of the product. It summarizes room conditions, comfort score, device state, alerts, and recent insights. The page uses lightweight polling rather than WebSockets because the goal is to create believable movement in the interface without adding real-time infrastructure complexity.
-
-Each dashboard refresh can trigger a simulation step, which appends fresh readings, updates battery and sync state, and recalculates downstream alert and insight context.
-
-### Room Detail Charts and Event Markers
-
-The room detail page deliberately avoids endless visualization sprawl. It has exactly four charts:
+The room detail page intentionally limits itself to four charts:
 
 - Temperature + Humidity
 - CO2
 - Light + Noise
 - Comfort Score Over Time
 
-This fixed scope makes the page easier to understand and keeps the MVP focused. Event markers provide narrative context by surfacing anomalies, alerts, and findings in the same time window rather than forcing the user to interpret raw charts alone.
+That fixed scope keeps the page readable and prevents the product from turning into a generic analytics surface. Event markers add narrative context by highlighting anomalies, alerts, and pattern-related moments alongside the charts.
 
-### Settings Updates
+### Onboarding
 
-The settings experience supports practical product adjustments: summary preferences and room thresholds. It is not trying to be a full administration surface. The user can meaningfully change the behavior of the demo without needing account systems, team permissions, or notification setup.
+Onboarding defines the space, selects room types, pairs devices, and gets the user into the product quickly. It exists to create just enough setup context to make the rest of the app feel personalized, without making setup itself the product.
+
+### Settings
+
+Settings focus on the practical controls that shape the product experience:
+
+- summary cadence
+- calm-mode style preferences
+- room thresholds for temperature, humidity, CO2, light, and noise
+
+The page is intentionally compact so adjustments feel useful instead of administrative.
+
+### Alerts and Insights
+
+Alerts call out threshold breaches tied directly to sensor values. Insights summarize patterns in a more product-facing way, turning room behavior into readable observations rather than leaving the user with only raw charts.
+
+## Tech Stack
+
+The stack is chosen for clarity and maintainability.
+
+- `Next.js App Router` handles both the product UI and the route-handler API layer.
+- `TypeScript` keeps contracts explicit between UI, services, queries, and route handlers.
+- `Tailwind CSS` supports the visual system without creating a separate styling abstraction layer.
+- `shadcn-style UI primitives` under `src/components/ui` provide a lightweight component base while allowing the interface to keep its own identity.
+- `Recharts` powers the room-detail visualizations without overwhelming the product with charting complexity.
+- `Zod` validates write payloads and query input at the API edge.
+- `Prisma` remains in the repo as the database-oriented evolution path, even though the current runtime uses an in-memory store.
+- `date-fns`, `lucide-react`, and a few focused utilities support formatting, timing, and presentation polish.
+
+## Architecture Overview
+
+The architecture is split so each layer has a clear responsibility.
+
+- `src/app/api` handles HTTP transport, validation, and response formatting.
+- `src/server/services` contains orchestration and business logic such as simulation refresh, alerts, settings writes, and insight assembly.
+- `src/server/queries` provides reusable read operations.
+- `src/server/store` owns the current in-memory fake runtime state and mutation helpers.
+- `src/lib` contains pure utilities, shared domain types, formatting helpers, constants, scoring logic, and validation schemas.
+
+UI components never talk to storage directly. Route handlers call services, services call queries and utilities, and the data source remains behind those boundaries.
 
 ## Data Model
 
-The data model is small, but each entity exists for a product reason.
+The data model is small, but each entity has a clear product purpose.
 
-- `User` represents the owner of the demo environment and provides a foundation for preferences.
-- `Space` is the top-level container for a single indoor environment such as a home or studio.
-- `Room` stores room identity, room type, and threshold preferences that shape scoring and alerts.
-- `Device` represents the paired monitor for a room and carries status signals such as battery, sync freshness, and connection state.
-- `SensorReading` is the time-series backbone of the app. Everything from charts to alerts to insights is grounded in these readings.
-- `Alert` represents a threshold breach or issue that should be visible to the user.
-- `Insight` stores a product-facing interpretation of a meaningful pattern found in the readings.
-- `UserPreference` contains summary cadence and dashboard-related preferences so the app can feel personalized without adding heavy settings complexity.
+- `User` represents the owner of the environment and anchors preference data.
+- `Space` is the top-level environment being monitored.
+- `Room` defines room identity, room type, and thresholds.
+- `Device` represents the paired monitor attached to a room.
+- `SensorReading` forms the time-series foundation used across charts, alerts, and insights.
+- `Alert` represents a threshold breach or issue that should be surfaced in the product.
+- `Insight` stores a product-facing explanation of a meaningful pattern.
+- `UserPreference` contains summary cadence and dashboard-related preference state.
 
 ## Simulation Strategy
 
-The simulation strategy was chosen to make the app believable without introducing background workers, live devices, or scheduling infrastructure.
+The simulation model is designed to make the product feel believable without depending on background workers, hardware integrations, or complex infrastructure.
 
-The system works in two stages:
+The runtime works in two stages:
 
 1. Seed historical data
 
-Each room starts with a realistic seven-day history of readings. This gives the dashboard, charts, alerts, and insights enough material to feel alive immediately instead of starting from an empty product shell.
+Each room starts with a realistic seven-day history. That gives the dashboard, charts, alerts, and insights enough context to feel alive immediately.
 
 2. Generate runtime updates on demand
 
-When the dashboard or room detail page polls for fresh data, the app generates a new reading if enough simulated time has passed. That reading applies gradual drift, room-type-specific behavior, and occasional anomalies. The same pass also updates battery level and last-sync timestamps.
+When the dashboard or room detail page polls for updates, the app generates a fresh reading if enough simulated time has passed. That update introduces gradual drift, room-type-specific behavior, occasional anomalies, and device-state changes such as battery and sync freshness.
 
-This approach keeps the demo simple to run, fast to review, and realistic enough to tell a convincing product story.
+This keeps the product responsive and demo-friendly while still grounding the experience in state that changes over time.
 
 ## Alerts and Comfort Scoring
 
-Alerts are generated by evaluating the latest readings against room thresholds for metrics such as CO2, humidity, and noise. Rather than inventing arbitrary badges, the app ties those alerts to real metric values so the user can understand why a room is in warning state.
+Alerts are evaluated from the latest readings against room thresholds for metrics like CO2, humidity, and noise. They are intentionally tied to actual readings so the product can explain why an alert exists instead of surfacing abstract warnings.
 
-Comfort scoring is derived rather than stored as a raw field on each reading. That was a deliberate design choice. The score is a product-level interpretation of the sensor data, not a primary measurement. By deriving it from readings and thresholds, the score stays explainable, consistent, and easy to recalculate if the underlying model changes.
+Comfort scoring is derived rather than stored as a raw measurement. It is a product-level interpretation built from the current readings and room thresholds. That keeps the score explainable and makes it easy to recalculate whenever the product logic changes.
 
 ## Insight System
 
-The insight system is intentionally split into two layers so the product can feel smart without becoming opaque.
+The insight system is intentionally split into two layers.
 
-The first layer is the finding layer. This is deterministic analysis over stored readings. It looks for patterns that matter from a product perspective, such as recurring CO2 spikes, abnormal humidity behavior, comfort score degradation, or unusual noise conditions.
+The first layer is the finding layer. This deterministic step analyzes stored readings and identifies patterns that matter to the product, such as recurring CO2 spikes, abnormal humidity behavior, comfort degradation, or unusual noise conditions.
 
-The second layer is the presentation layer. It takes those findings and turns them into concise, user-facing product copy. Right now, the phrasing is deterministic so the app stays reliable and easy to run. The architecture leaves room for an optional LLM adapter later, but that future layer is additive rather than foundational.
+The second layer is the presentation layer. It takes those findings and turns them into concise user-facing product copy. The current phrasing is deterministic, but the architecture leaves room for an optional LLM adapter later without making the product dependent on it.
 
 Example:
 
@@ -155,11 +157,11 @@ Example:
 - evidence: `5 of recent afternoon samples exceeded the CO2 threshold between 14:00-16:00`
 - display text: `Air quality tends to drop in the afternoon.`
 
-That separation matters because it keeps the insight engine grounded. The product can evolve toward richer phrasing later without losing trust in the evidence behind each insight.
+That split keeps the product grounded in evidence while still allowing the interface to speak in a calm, readable way.
 
 ## Running the Project Locally
 
-The current local workflow is intentionally simple and does not require PostgreSQL.
+The current local workflow does not require PostgreSQL.
 
 1. Install dependencies
 
@@ -179,21 +181,21 @@ npm run dev
 http://localhost:3000
 ```
 
-4. Explore the main flows
+4. Explore the main product flows
 
-- Start on the landing page
-- Enter the demo or run onboarding
-- Open the dashboard and room detail pages
-- Change preferences in settings
+- start from the landing page
+- enter the demo or run onboarding
+- open the dashboard and room detail pages
+- update thresholds and preferences in settings
 
 Important behavior to know:
 
-- The fake in-memory store is seeded automatically when the server starts.
-- Onboarding and settings mutate that in-memory state during the current session.
-- Restarting the server resets the app back to the seeded demo baseline.
-- `.env`, Prisma migrations, and `db:seed` are not required for the current fake-data workflow.
+- the fake in-memory store is seeded automatically at server startup
+- onboarding and settings mutate that in-memory state during the current session
+- restarting the server resets the app back to the seeded baseline
+- `.env`, Prisma migrations, and `db:seed` are not required for the current fake-data workflow
 
-If you want a more stable local runtime after building the app, you can also run:
+For a more stable local runtime after building the app:
 
 ```bash
 npm run build
@@ -205,63 +207,49 @@ npm run start
 - `npm run dev`
   Starts the Next.js development server for everyday local iteration.
 - `npm run build`
-  Builds the production bundle and is the quickest way to confirm the app is deployment-ready.
+  Builds the production bundle and verifies the app can ship cleanly.
 - `npm run start`
-  Runs the built production app locally, which is useful when you want to verify stable runtime behavior outside the dev server.
+  Runs the built production app locally.
 - `npm run lint`
-  Runs ESLint across the project and helps catch regressions before publishing.
+  Runs ESLint across the project.
 - `npm run db:generate`
   Generates the Prisma client for future database-backed work.
 - `npm run db:migrate`
-  Remains available for a future PostgreSQL-backed version of Luma.
+  Remains available for a future PostgreSQL-backed version.
 - `npm run db:seed`
   Remains available for future Prisma/PostgreSQL reactivation.
 
-## Design and UX Decisions
+## Design Decisions
 
-Visually, Luma is meant to feel calm, premium, and a little more editorial than operational. I wanted the interface to suggest a thoughtful consumer-facing product, not an internal admin dashboard full of dense chrome and generic widgets.
+Luma is designed to feel calm, premium, and readable rather than dense or administrative. The interface leans on soft surfaces, warmer neutrals, clear spacing, and a restrained visual system so the product feels like a thoughtful indoor companion instead of an internal ops dashboard.
 
-That led to a few specific decisions:
+A few decisions shape that tone:
 
-- A restrained color system with soft surfaces and warmer neutrals
-- Rounded, spacious layouts instead of compact enterprise density
-- Fixed chart scope so the room page stays focused
-- Clear empty, loading, and error states so the prototype feels complete
-- Mobile-aware layouts so the app still reads clearly on narrower screens
-
-The overall goal was to make the UI feel intentional and readable while still supporting real application behavior.
+- a restrained color system with warmer neutrals
+- rounded, spacious layouts instead of compact enterprise density
+- fixed chart scope so room detail stays focused
+- clear loading, empty, and error states
+- mobile-aware layouts that still read clearly on narrower screens
 
 ## Tradeoffs and Simplifications
 
-This project is full of deliberate tradeoffs.
+Several simplifications are intentional.
 
-- The app uses a fake in-memory runtime store today because portfolio reviewers should be able to run it immediately.
-- The product uses polling instead of WebSockets because the interaction needs believable updates, not infrastructure theater.
-- The MVP supports one primary space and one device per room because that is enough to validate the concept.
-- The current insight layer is deterministic because grounded product behavior matters more than flashy AI copy.
-- Production auth, collaboration, notifications, and exports were excluded so the product could stay polished where it matters most.
+- the current runtime uses an in-memory store so the app is easy to run locally
+- polling is used instead of WebSockets to keep updates believable without adding real-time infrastructure
+- the product supports one primary space and one device per room in the MVP
+- the current insight layer is deterministic instead of depending on AI services
+- production authentication, collaboration, notifications, and exports are intentionally excluded
 
-These simplifications are part of the architecture strategy, not shortcuts hidden behind the UI.
+These are scope decisions, not hidden gaps in the product model.
 
-## What I Would Build Next
+## Future Improvements
 
-If I continued this project, the next steps would be practical extensions of the current architecture rather than a full rewrite.
+The next natural extensions of the current architecture are:
 
-- Reactivate PostgreSQL with Prisma as the live runtime store
-- Add a thin optional LLM phrasing adapter on top of the deterministic insight system
-- Introduce richer visual assets such as polished screenshots or demo GIFs
-- Add historical summaries and richer comfort trend comparisons
-- Expand device realism without drifting into unnecessary firmware simulation
-- Add a lightweight authentication path once the single-user demo story is no longer the main priority
-
-## Visual Walkthrough
-
-This README is intentionally text-first for now. I wanted the portfolio story, product decisions, and architecture to stand on their own before relying on screenshots.
-
-The next documentation pass can add screenshots or short GIFs for:
-
-- the landing page
-- the dashboard
-- the onboarding flow
-- the room detail page
-- the settings experience
+- reactivate PostgreSQL with Prisma as the live runtime store
+- add an optional LLM phrasing adapter on top of the deterministic insight system
+- expand historical summaries and comfort comparisons
+- improve device realism without turning the product into a firmware simulator
+- add richer visual assets and release-ready polish
+- introduce a lightweight authentication path once single-user demo mode is no longer enough

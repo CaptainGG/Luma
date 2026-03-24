@@ -1,6 +1,6 @@
 {
   "name": "luma",
-  "description": "A portfolio-quality smart indoor environment companion built with Next.js, TypeScript, simulated sensor data, and a clean full-stack dashboard.",
+  "description": "A smart indoor environment companion built with Next.js, TypeScript, simulated sensor data, and a clean full-stack dashboard.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
