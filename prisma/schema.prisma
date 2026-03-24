@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoomType {
+  BEDROOM
+  WORKSPACE
+  LIVING_ROOM
+  SHARED_ROOM
+}
+
+enum ConnectionState {
+  ONLINE
+  IDLE
+  OFFLINE
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum AlertStatus {
+  ACTIVE
+  RESOLVED
+}
+
+enum InsightType {
+  AIR_QUALITY
+  COMFORT
+  HUMIDITY
+  LIGHTING
+  NOISE
+}
+
+enum InsightSource {
+  RULES
+  LLM
+}
+
+enum SummaryCadence {
+  DAILY
+  WEEKLY
+  OFF
+}
+
+model User {
+  id          String          @id @default(cuid())
+  email       String          @unique
+  name        String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  spaces      Space[]
+  preference  UserPreference?
+}
+
+model Space {
+  id         String   @id @default(cuid())
+  name       String
+  userId     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rooms      Room[]
+
+  @@index([userId])
+}
+
+model Room {
+  id                 String          @id @default(cuid())
+  spaceId            String
+  name               String
+  type               RoomType
+  temperatureMin     Float
+  temperatureMax     Float
+  humidityMin        Float
+  humidityMax        Float
+  co2Max             Int
+  lightTarget        Int
+  noiseMax           Int
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  space              Space           @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  device             Device?
+  readings           SensorReading[]
+  alerts             Alert[]
+  insights           Insight[]
+
+  @@index([spaceId])
+}
+
+model Device {
+  id               String          @id @default(cuid())
+  roomId           String          @unique
+  name             String
+  batteryLevel     Int
+  connectionState  ConnectionState @default(ONLINE)
+  firmwareVersion  String
+  lastSyncAt       DateTime
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  room             Room            @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  readings         SensorReading[]
+  alerts           Alert[]
+
+  @@index([lastSyncAt])
+}
+
+model SensorReading {
+  id           String   @id @default(cuid())
+  roomId        String
+  deviceId      String
+  timestamp     DateTime
+  temperature   Float
+  humidity      Float
+  co2           Int
+  light         Int
+  noise         Int
+  occupancy     Int
+  isAnomaly     Boolean  @default(false)
+  anomalyLabel  String?
+  createdAt     DateTime @default(now())
+  room          Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  device        Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, timestamp])
+  @@index([deviceId, timestamp])
+}
+
+model Alert {
+  id           String        @id @default(cuid())
+  roomId        String
+  deviceId      String?
+  severity      AlertSeverity
+  status        AlertStatus   @default(ACTIVE)
+  title         String
+  description   String
+  metricKey     String
+  threshold     Float?
+  triggeredAt   DateTime
+  resolvedAt    DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  room          Room          @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  device        Device?       @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+
+  @@index([roomId, status])
+  @@index([triggeredAt])
+}
+
+model Insight {
+  id            String        @id @default(cuid())
+  roomId         String
+  type           InsightType
+  findingKey     String
+  evidence       String
+  displayText    String
+  source         InsightSource @default(RULES)
+  windowStart    DateTime
+  windowEnd      DateTime
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  room           Room          @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, createdAt])
+  @@index([findingKey])
+}
+
+model UserPreference {
+  id                String         @id @default(cuid())
+  userId            String         @unique
+  summaryCadence    SummaryCadence @default(DAILY)
+  morningDigest     Boolean        @default(true)
+  anomalyHighlights Boolean        @default(true)
+  comfortTargets    Boolean        @default(true)
+  calmMode          Boolean        @default(true)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
